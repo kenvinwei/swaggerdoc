@@ -45,7 +45,8 @@ func main() {
 		d := r.Form["jsonData"][0]
 
 		lib.FindRequest(d, "")
-		comment := lib.MakeComment(lib.AllRequest[0])
+		req := lib.AllRequest[0]
+		comment := lib.MakeComment(req)
 		lib.AllRequest = lib.AllRequest[1:]
 
 		commentString = joinComment(commentString, "/**")
@@ -54,6 +55,14 @@ func main() {
 		}
 
 		commentString = joinComment(commentString, " */")
+		commentString = joinComment(commentString, "\n\n")
+
+		funcStruct := lib.MakeFuncStruct(req)
+
+		for _, f := range funcStruct {
+			commentString = joinComment(commentString, " "+f)
+		}
+
 		commentString = joinComment(commentString, "\n\n")
 
 		w.Write([]byte(commentString))
