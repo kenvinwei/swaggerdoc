@@ -1,9 +1,11 @@
 package lib
 
 import (
+	"fmt"
+	"reflect"
+
 	"github.com/fatih/color"
 	"github.com/tidwall/gjson"
-	"reflect"
 )
 
 type Parameter struct {
@@ -33,21 +35,14 @@ var AllRequest []Request
 
 func FindRequest(str string, ParentName string) {
 	json := gjson.Parse(str)
-	item := json.Get("collections")
+	item := json.Get("item")
 	itemExists := item.Exists()
 	if itemExists == true {
+		item.ForEach(func(key, value gjson.Result) bool {
 
-		item.ForEach(func(k, v gjson.Result) bool {
-			requests := v.Get("requests")
-
-			requests.ForEach(func(key, value gjson.Result) bool {
-
-				FindRequest(value.String(), setName(ParentName, ""))
-				return true
-			})
+			FindRequest(value.String(), setName(ParentName, ""))
 			return true
 		})
-
 		//name := json.Get("name").String()
 
 	} else { //
@@ -64,6 +59,7 @@ func ParseRequest(body gjson.Result, ParentName string) {
 	method := body.Get("request.method").String()
 
 	hostData := body.Get("request.url.host").Value()
+	fmt.Println(hostData)
 	if hostData == nil {
 		color.Red(name + "【host】 格式不全，无法解析该请求")
 		return

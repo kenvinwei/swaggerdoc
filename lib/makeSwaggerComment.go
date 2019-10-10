@@ -2,8 +2,9 @@ package lib
 
 import (
 	"fmt"
-	"github.com/tidwall/gjson"
 	"strings"
+
+	"github.com/tidwall/gjson"
 )
 
 type LineComent struct {
@@ -21,14 +22,14 @@ func MakeTile(host string, base_Path string, version string, title string, descr
 	comment := make([]string, 0)
 	blankIndex := 0
 
-	comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Swagger(")
+	comment = append(comment, blankRepeat(blankIndex)+"@OA\\Swagger(")
 	blankIndex = blankIndex + 1
 
 	comment = append(comment, blankRepeat(blankIndex)+"schemes={\"http\",\"https\"},")
 
 	comment = append(comment, blankRepeat(blankIndex)+"host=\""+host+"\",")
 	comment = append(comment, blankRepeat(blankIndex)+"basePath=\""+base_Path+"\",")
-	comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Info(")
+	comment = append(comment, blankRepeat(blankIndex)+"@OA\\Info(")
 
 	blankIndex = blankIndex + 1
 
@@ -36,7 +37,7 @@ func MakeTile(host string, base_Path string, version string, title string, descr
 	comment = append(comment, blankRepeat(blankIndex)+"title=\""+title+"\",")
 	comment = append(comment, blankRepeat(blankIndex)+"description=\""+description+"\",")
 	comment = append(comment, blankRepeat(blankIndex)+"termsOfService=\"\",")
-	comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Contact(")
+	comment = append(comment, blankRepeat(blankIndex)+"@OA\\Contact(")
 	blankIndex = blankIndex + 1
 	comment = append(comment, blankRepeat(blankIndex)+"email=\""+contact+"\"")
 
@@ -57,7 +58,7 @@ func MakeComment(singeRequest Request) []string {
 	blankIndex := 0
 
 	//请求方式
-	comment = append(comment, "@SWG\\"+singeRequest.Method+"(")
+	comment = append(comment, "@OA\\"+singeRequest.Method+"(")
 
 	blankIndex = blankIndex + 1
 
@@ -77,13 +78,13 @@ func MakeComment(singeRequest Request) []string {
 	queryNum := len(singeRequest.Query)
 
 	for parameterIndex < queryNum {
-		singeParameter := "@SWG\\Parameter(name =\"" + singeRequest.Query[parameterIndex].Key + "\", type=\"" + singeRequest.Query[parameterIndex].Type + "\", required=true, in=\"query\",description=\"" + singeRequest.Query[parameterIndex].Description + "\"),"
+		singeParameter := "@OA\\Parameter(name =\"" + singeRequest.Query[parameterIndex].Key + "\", type=\"" + singeRequest.Query[parameterIndex].Type + "\", required=true, in=\"query\",description=\"" + singeRequest.Query[parameterIndex].Description + "\"),"
 		comment = append(comment, blankRepeat(blankIndex)+singeParameter)
 		parameterIndex = parameterIndex + 1
 	}
 	//Body
 	if singeRequest.Body.Mode == "raw" {
-		comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Schema(")
+		comment = append(comment, blankRepeat(blankIndex)+"@OA\\Schema(")
 
 		bodyComment := make([]LineComent, 0)
 		bodyComment = Json2Comemt(gjson.Parse(singeRequest.Body.Content.(string)), blankIndex, bodyComment)
@@ -95,17 +96,17 @@ func MakeComment(singeRequest Request) []string {
 
 	} else if singeRequest.Body.Mode == "formdata" || singeRequest.Body.Mode == "urlencoded" {
 		for _, singleBodyParameter := range singeRequest.Body.Content.([]Parameter) {
-			singeBodyParameter := "@SWG\\Parameter(name =\"" + singleBodyParameter.Key + "\", type=\"" + singleBodyParameter.Type + "\", required=true, in=\"body\",description=\"" + singleBodyParameter.Description + "\"),"
+			singeBodyParameter := "@OA\\Parameter(name =\"" + singleBodyParameter.Key + "\", type=\"" + singleBodyParameter.Type + "\", required=true, in=\"body\",description=\"" + singleBodyParameter.Description + "\"),"
 			comment = append(comment, blankRepeat(blankIndex)+singeBodyParameter)
 		}
 	}
 
 	//Response
-	comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Response(")
+	comment = append(comment, blankRepeat(blankIndex)+"@OA\\Response(")
 	blankIndex = blankIndex + 1
 	comment = append(comment, blankRepeat(blankIndex)+"response=\"200\",")
 	comment = append(comment, blankRepeat(blankIndex)+"description=\"接口响应\",")
-	comment = append(comment, blankRepeat(blankIndex)+"@SWG\\Schema(")
+	comment = append(comment, blankRepeat(blankIndex)+"@OA\\Schema(")
 
 	responseComment := make([]LineComent, 0)
 
@@ -142,7 +143,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 			} else {
 				thisType = "int"
 			}
-			line.Content = "@SWG\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
+			line.Content = "@OA\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
 			line.IndentNum = level
 			responseComment = append(responseComment, line)
 			break
@@ -156,7 +157,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 			} else {
 				thisType = "string"
 			}
-			line.Content = "@SWG\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
+			line.Content = "@OA\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
 			line.IndentNum = level
 			responseComment = append(responseComment, line)
 			break
@@ -166,7 +167,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 				len := len(value.Array())
 				if len == 0 {
 					line := LineComent{}
-					line.Content = "@SWG\\Property( property=\"data\" , type=\"string\" , example=\"\",description=\"填写描述\"),"
+					line.Content = "@OA\\Property( property=\"data\" , type=\"string\" , example=\"\",description=\"填写描述\"),"
 					line.IndentNum = level
 					responseComment = append(responseComment, line)
 
@@ -174,7 +175,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 					value = value.Array()[0]
 
 					lineStart := LineComent{}
-					lineStart.Content = "@SWG\\Property( property=\"" + key.String() + "\" ,type=\"array\","
+					lineStart.Content = "@OA\\Property( property=\"" + key.String() + "\" ,type=\"array\","
 					lineStart.IndentNum = level
 					responseComment = append(responseComment, lineStart)
 					responseComment = Json2Comemt(value, level+1, responseComment)
@@ -186,7 +187,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 				}
 			} else {
 				lineStart := LineComent{}
-				lineStart.Content = "@SWG\\Property( property=\"" + key.String() + "\" ,type=\"object\","
+				lineStart.Content = "@OA\\Property( property=\"" + key.String() + "\" ,type=\"object\","
 				lineStart.IndentNum = level
 				responseComment = append(responseComment, lineStart)
 				responseComment = Json2Comemt(value, level+1, responseComment)
@@ -202,7 +203,7 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 			thisValue := value.String()
 			thisType := "bool"
 
-			line.Content = "@SWG\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
+			line.Content = "@OA\\Property( property=\"" + key.String() + "\" , type=\"" + thisType + "\" , example=\"" + thisValue + "\",description=\"填写描述\"),"
 			line.IndentNum = level
 			responseComment = append(responseComment, line)
 			break
