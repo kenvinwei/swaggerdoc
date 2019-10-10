@@ -110,7 +110,6 @@ func MakeComment(singeRequest Request) []string {
 
 	responseComment := make([]LineComent, 0)
 
-	fmt.Println(singeRequest.Response)
 	responseComment = Json2Comemt(gjson.Parse(singeRequest.Response), blankIndex, responseComment)
 
 	for _, singleResponse := range responseComment {
@@ -121,6 +120,7 @@ func MakeComment(singeRequest Request) []string {
 	comment = append(comment, blankRepeat(blankIndex)+")")
 	blankIndex = blankIndex - 1
 	comment = append(comment, blankRepeat(blankIndex)+")")
+
 	return comment
 }
 
@@ -214,4 +214,15 @@ func Json2Comemt(json gjson.Result, level int, responseComment []LineComent) []L
 		return true
 	})
 	return responseComment
+}
+
+func MakeFuncStruct(singeRequest Request) (funcStruct []string) {
+
+	pathInfo := strings.TrimRight(strings.SplitAfter(singeRequest.Path, "/:")[0], "/:")
+	functionName := strings.Split(pathInfo, "/")[len(strings.Split(pathInfo, "/"))-1]
+
+	funcStruct = append(funcStruct, fmt.Sprintf("public function %s()", functionName))
+	funcStruct = append(funcStruct, "{")
+	funcStruct = append(funcStruct, "}")
+	return funcStruct
 }

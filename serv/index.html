@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<title>DK swagger doc tool</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body class="html">
+  <div class="container">
+  <!-- Content here -->
+    <div class="card">
+      <div class="card-body">
+          { DK swagger doc tool }
+      </div>
+    </div>
+    <form class="was-validated" method="post" action="/make?r={{.R}}">
+      <div class="mb-3">
+        <label for="validationTextarea">Parse JSON Data</label>
+        <textarea class="form-control" name="jsonData" style="height:800px" id="">
+{
+	"name": "/temporary_order/order/detail/{id}",
+	"request": {
+		"method": "GET",
+		"url": {
+			"raw": "/temporary_order/order/detail/:id",
+			"host": [
+				"{{.Url}}"
+			],
+        "path": "/temporary_order/order/detail/{id}",
+		},
+    "body": {
+				"mode": "raw",
+				"raw": {"category_id": 51, "ddd" : 1},
+				"options": {
+					"raw": {
+						"language": "json"
+					}
+			}
+		}
+	},
+	"response": [{
+		"name": "/temporary_order/order/detail/{id}",
+		"originalRequest": {
+			"method": "GET",
+			"header": [],
+			"url": {
+				"raw": "{{.Url}}/{{.Prefix}}/temporary_order/order/detail/:id",
+			}
+		},
+		"status": "OK",
+		"code": 200,
+		"body": {
+				"code": 0,
+				"message": "success",
+				"data": {
+					"id": 20191008000014
+				}
+		}
+	}]
+}
+        </textarea>
+        <div class="invalid-feedback" style="display:none">
+        Please enter a message in the textarea.
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

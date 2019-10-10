@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"fmt"
 	"reflect"
 
 	"github.com/fatih/color"
@@ -34,8 +33,10 @@ type Request struct {
 var AllRequest []Request
 
 func FindRequest(str string, ParentName string) {
+
 	json := gjson.Parse(str)
 	item := json.Get("item")
+
 	itemExists := item.Exists()
 	if itemExists == true {
 		item.ForEach(func(key, value gjson.Result) bool {
@@ -51,6 +52,7 @@ func FindRequest(str string, ParentName string) {
 }
 
 func ParseRequest(body gjson.Result, ParentName string) {
+
 	if body.Get("name").Value() == nil || body.Get("request").Value() == nil || body.Get("response").Value() == nil {
 		return
 	}
@@ -59,18 +61,14 @@ func ParseRequest(body gjson.Result, ParentName string) {
 	method := body.Get("request.method").String()
 
 	hostData := body.Get("request.url.host").Value()
-	fmt.Println(hostData)
+
 	if hostData == nil {
 		color.Red(name + "【host】 格式不全，无法解析该请求")
 		return
 	}
 	host := body.Get("request.url.protocol").String() + "://" + joinArrayFromInterface(hostData, ".")
-	path := "/"
 
-	pathData := body.Get("request.url.path").Value()
-	if pathData != nil {
-		path = "/" + joinArrayFromInterface(body.Get("request.url.path").Value(), "/")
-	}
+	path := body.Get("request.url.path").String()
 
 	query := make([]Parameter, 0)
 	if body.Get("request.url.query").Exists() {
@@ -81,6 +79,7 @@ func ParseRequest(body gjson.Result, ParentName string) {
 	bodyRequest := Body{}
 
 	bodyMode := body.Get("request.body.mode")
+
 	if bodyMode.Exists() {
 		bodyRequest.Mode = bodyMode.String()
 		if bodyMode.String() == "raw" {

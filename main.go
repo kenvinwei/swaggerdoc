@@ -2,10 +2,11 @@ package main
 
 import (
 	"flag"
-	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
 	"swaggerdoc/lib"
+
+	"github.com/fatih/color"
 )
 
 var (
@@ -53,6 +54,7 @@ func main() {
 
 	for i < requestNum {
 		comment = lib.MakeComment(lib.AllRequest[i])
+
 		commentString = joinComment(commentString, "/**")
 		for _, c := range comment {
 			commentString = joinComment(commentString, " *"+c)
@@ -60,8 +62,18 @@ func main() {
 
 		commentString = joinComment(commentString, " */")
 		commentString = joinComment(commentString, "\n\n")
+
+		funcStruct := lib.MakeFuncStruct(lib.AllRequest[i])
+
+		for _, f := range funcStruct {
+			commentString = joinComment(commentString, " "+f)
+		}
+
+		commentString = joinComment(commentString, "\n\n")
+
 		i = i + 1
 	}
+
 	f, err := os.OpenFile(*outputFile, os.O_RDWR|os.O_CREATE, 0755)
 	defer f.Close()
 	if err != nil {
