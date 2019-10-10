@@ -16,37 +16,20 @@
     <form class="was-validated" method="post" action="/make?r={{.R}}">
       <div class="mb-3">
         <label for="validationTextarea">Parse JSON Data</label>
-        <textarea class="form-control" name="jsonData" style="height:800px" id="">
+        <textarea class="form-control" name="jsonData" style="height:500px" id="">
 {
-	"name": "/temporary_order/order/detail/{id}",
+	"name": "update your name",
 	"request": {
 		"method": "GET",
 		"url": {
-			"raw": "/temporary_order/order/detail/:id",
-			"host": [
-				"{{.Url}}"
-			],
-        "path": "/temporary_order/order/detail/{id}",
+        "path": "/url/path/request/{id}",
 		},
     "body": {
 				"mode": "raw",
-				"raw": {"category_id": 51, "ddd" : 1},
-				"options": {
-					"raw": {
-						"language": "json"
-					}
-			}
-		}
+				"raw": {"test1": 1, "test2" : 2, "arr":[1,2,3]},
+		 }
 	},
 	"response": [{
-		"name": "/temporary_order/order/detail/{id}",
-		"originalRequest": {
-			"method": "GET",
-			"header": [],
-			"url": {
-				"raw": "{{.Url}}/{{.Prefix}}/temporary_order/order/detail/:id",
-			}
-		},
 		"status": "OK",
 		"code": 200,
 		"body": {

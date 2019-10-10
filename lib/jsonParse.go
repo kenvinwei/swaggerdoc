@@ -3,7 +3,6 @@ package lib
 import (
 	"reflect"
 
-	"github.com/fatih/color"
 	"github.com/tidwall/gjson"
 )
 
@@ -60,13 +59,16 @@ func ParseRequest(body gjson.Result, ParentName string) {
 	name := ParentName + "/" + body.Get("name").String()
 	method := body.Get("request.method").String()
 
-	hostData := body.Get("request.url.host").Value()
+	host := ""
+	/*
+		hostData := body.Get("request.url.host").Value()
 
-	if hostData == nil {
-		color.Red(name + "【host】 格式不全，无法解析该请求")
-		return
-	}
-	host := body.Get("request.url.protocol").String() + "://" + joinArrayFromInterface(hostData, ".")
+		if hostData == nil {
+			color.Red(name + "【host】 格式不全，无法解析该请求")
+			return
+		}
+		host := body.Get("request.url.protocol").String() + "://" + joinArrayFromInterface(hostData, ".")
+	*/
 
 	path := body.Get("request.url.path").String()
 
