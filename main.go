@@ -45,7 +45,7 @@ func main() {
 		os.Exit(0)
 	}
 	i := 0
-	commentString := "<?php\n/**"
+	commentString := "/**"
 	comment := lib.MakeTile(*host, *basePath, *version, *title, *description, *contact)
 	for _, c := range comment {
 		commentString = joinComment(commentString, " *"+c)
@@ -63,11 +63,11 @@ func main() {
 		commentString = joinComment(commentString, " */")
 		commentString = joinComment(commentString, "\n\n")
 
-		funcStruct := lib.MakeFuncStruct(lib.AllRequest[i])
-
-		for _, f := range funcStruct {
-			commentString = joinComment(commentString, " "+f)
-		}
+		//funcStruct := lib.MakeFuncStruct(lib.AllRequest[i])
+		//
+		//for _, f := range funcStruct {
+		//	commentString = joinComment(commentString, " "+f)
+		//}
 
 		commentString = joinComment(commentString, "\n\n")
 
